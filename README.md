@@ -15,7 +15,7 @@ To use this plugin, add the following to your build -
 ## project/plugins.sbt
 
 ```scala
-libraryDependencies += "com.vast.sbt" %% "sbt-sl4fj" % "0.2.1"
+addSbtPlugin("info.hupel.fork.com.vast.sbt" %% "sbt-sl4fj" % "0.3")
 ```
 
 In tasks that call out to libraries that use slf4j, wrap the task implementation with the following
