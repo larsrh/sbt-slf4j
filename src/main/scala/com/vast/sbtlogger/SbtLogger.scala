@@ -7,6 +7,9 @@ import scala.util.DynamicVariable
 
 object SbtLogger {
   val currentSbtLogger: DynamicVariable[Option[sbt.Logger]] = new DynamicVariable(None)
+  def getCurrentSbtLogger: sbt.Logger = currentSbtLogger.value.getOrElse(sys.error(
+    "No SBT logger set; make sure to wrap log-producing calls into `SbtLogger.withLogger(...) { ... }`"
+  ))
 
   def withLogger[T](l: sbt.Logger)(f: => T): T = {
     currentSbtLogger.withValue(Some(l))(f)
@@ -21,7 +24,7 @@ object SbtLogger {
 
 }
 
-class SbtLogger(sbtLogger: sbt.Logger) extends MarkerIgnoringBase with Logger {
+class SbtLogger extends MarkerIgnoringBase with Logger {
 
   import SbtLogger._
 
@@ -62,23 +65,23 @@ class SbtLogger(sbtLogger: sbt.Logger) extends MarkerIgnoringBase with Logger {
   override def info(format: String, arguments: AnyRef*): Unit = formatAndLog(INFO, format, arguments)
   override def info(msg: String, t: Throwable): Unit = writeLogMessage(INFO, Some(msg), Some(t))
 
-  private def formatAndLog(level: LogLevel, format: String, arg: Any) {
+  private def formatAndLog(level: LogLevel, format: String, arg: Any) = {
     val tuple = MessageFormatter.format(format, arg)
     writeLogMessage(level, Option(tuple.getMessage), Option(tuple.getThrowable))
   }
 
-  private def formatAndLog(level: LogLevel, format: String, arg1: Any, arg2: Any) {
+  private def formatAndLog(level: LogLevel, format: String, arg1: Any, arg2: Any) = {
     val tuple = MessageFormatter.format(format, arg1, arg2)
     writeLogMessage(level, Option(tuple.getMessage), Option(tuple.getThrowable))
   }
 
-  private def formatAndLog(level: LogLevel, format: String, arguments: AnyRef*) {
+  private def formatAndLog(level: LogLevel, format: String, arguments: AnyRef*) = {
     val tuple = MessageFormatter.arrayFormat(format, arguments.toArray)
     writeLogMessage(level, Option(tuple.getMessage), Option(tuple.getThrowable))
   }
 
-  private def writeLogMessage(level: LogLevel, message: Option[String], t: Option[Throwable] = None) {
-
+  private def writeLogMessage(level: LogLevel, message: Option[String], t: Option[Throwable] = None) = {
+    val sbtLogger = getCurrentSbtLogger
     message.foreach { m =>
       level match {
         case TRACE => sbtLogger.debug(m)
@@ -90,6 +93,5 @@ class SbtLogger(sbtLogger: sbt.Logger) extends MarkerIgnoringBase with Logger {
     }
     t.foreach((t: Throwable) => sbtLogger.trace(t))
   }
-
 
 }
