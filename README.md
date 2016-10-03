@@ -1,6 +1,10 @@
 sbt-slf4j
 =========
 
+| Service                   | Status |
+| ------------------------- | ------ |
+| Travis (Linux CI)         | [![Build Status](https://travis-ci.org/larsrh/sbt-slf4j.svg?branch=master)](https://travis-ci.org/larsrh/sbt-slf4j) |
+
 _Note:_ This is a fork of [sbt-slf4j](https://github.com/sbt-slf4j/sbt-slf4j).
 Credit goes to the original authors (see link).
 
