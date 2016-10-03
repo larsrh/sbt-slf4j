@@ -5,7 +5,12 @@ description := "An SLF4j backend that utilizes the SBT TaskStreams log."
 
 sbtPlugin := true
 
-libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.19"
+resolvers += Resolver.sonatypeRepo("releases")
+
+libraryDependencies ++= Seq(
+  "org.slf4j" % "slf4j-api" % "1.7.19",
+  "info.hupel" %% "slf4j-impl-helper" % "0.1"
+)
 
 homepage := Some(url("https://github.com/larsrh/sbt-slf4j"))
 
