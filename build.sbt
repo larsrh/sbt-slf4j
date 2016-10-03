@@ -38,6 +38,9 @@ pomExtra := (
   </scm>
 )
 
+scriptedSettings
+scriptedLaunchOpts <+= version apply { v => "-Dproject.version="+v }
+
 
 // Release stuff
 
