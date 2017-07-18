@@ -38,13 +38,13 @@ pomExtra := (
   </scm>
 )
 
-scriptedSettings
-scriptedLaunchOpts <+= version apply { v => "-Dproject.version="+v }
+//scriptedSettings
+scriptedLaunchOpts += "-Dproject.version=" + version.value
 
 
 // Release stuff
 
-import ReleaseTransformations._
+//import ReleaseTransformations._
 
 credentials += Credentials(
   Option(System.getProperty("build.publish.credentials")) map (new File(_)) getOrElse (Path.userHome / ".ivy2" / ".credentials")
@@ -52,7 +52,7 @@ credentials += Credentials(
 
 sonatypeProfileName := "info.hupel"
 
-releaseProcess := Seq[ReleaseStep](
+/*releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
@@ -63,4 +63,4 @@ releaseProcess := Seq[ReleaseStep](
   setNextVersion,
   commitNextVersion,
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _))
-)
+)*/
